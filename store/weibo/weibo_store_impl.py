@@ -57,7 +57,7 @@ class WeiboCsvStoreImplement(AbstractStore):
 
         """
 
-        return f"{self.csv_store_path}/{crawler_type_var.get()}_{store_type}_{utils.get_current_date()}.csv"
+        return f"{self.csv_store_path}/{crawler_type_var.get()}_{store_type}.csv"
 
     async def save_data_to_csv(self, save_item: Dict, store_type: str):
         """
