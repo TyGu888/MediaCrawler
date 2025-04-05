@@ -8,12 +8,77 @@
 # 详细许可条款请参阅项目根目录下的LICENSE文件。
 # 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
 
+from var import topic_var
+
+topic_var.set("打黑剧本")
 
 # 基础配置
-PLATFORM = "xhs"
-KEYWORDS = "编程副业,编程兼职"  # 关键词搜索配置，以英文逗号分隔
-LOGIN_TYPE = "qrcode"  # qrcode or phone or cookie
-COOKIES = ""
+PLATFORM = "wb"
+KEYWORDS = [
+            
+            # 题材应用关键词
+            # '东北的犯罪故事', '黑恶势力产业链', '警察勇斗黑恶势力', 
+            # '正义与邪恶对决', '父与子的伦理秘密', '强拆事件',
+            
+            # 角色关键词-雷万一
+            #'正义警察', lui
+            #'冷酷', '执著', 
+            #'强迫症', '武力强大', '父子关系破裂',
+            
+            # 角色关键词-魏天朗
+            # '黑恶势力', '黑社会头目', '暴力', '偏执', '父权崇拜', '私生子',
+            
+            # # # 角色关键词-程琳
+            # '美貌', '蛇蝎美人', '情妇', '舞厅老板', '精明', '觉醒',
+            
+            # # # 情节关键词-第一幕
+            # '祖坟被刨', '冰河抛尸', '暴力强拆', '民工袭警', '羞辱父亲',
+            
+            # # # 情节关键词-第二幕(上)
+            # '权黑共生', '父子和解', '近身肉搏', 
+            #'工厂爆炸', '火海逃生',被打断
+            
+            # # 情节关键词-第二幕(下)
+            #'杀人灭口', '栽赃陷害', '舆论危机', '爱人去世', 
+            #'锁定线索',
+            
+            # # 情节关键词-第三幕
+            #'发现洗钱', '弑父献祭'13, 
+            '捉拿归案', '清扫腐败', '成为英雄',
+            
+            # # 主题应用关键词
+            '反对权力腐败', '正义战胜黑恶势力', '反对父权统治'
+            
+            # #角色关键词-娜缇
+            # '宿命', '宿主', '童年不幸', '被霸凌', '复仇少女', '对抗邪恶',
+            
+            # # 角色关键词-蛊婆
+            # '守墓人', '传承者', '母爱', '牺牲', '禁忌手段', '被反噬',
+            
+            # # 角色关键词-张月梅
+            # '法医', '相信科学', '丧女之痛', '追查者',
+            #   '救赎自己',
+            
+            # # 角色关键词-魏婷婷
+            # # '霸凌者', '富家女', '弑父', '疯癫', 
+            # # '恃强凌弱', '美貌',
+            
+            # # # 角色关键词-魏明轩
+            # # '暴发户', '迷信', '贪婪', '资本家', '宠女儿',
+            
+            # # # 情节关键词
+            # # '母亲难产', '驱邪仪式',
+            # #  '遭遇霸凌', '视为祸害', '直播死亡',
+            # # '法医追凶', '早年丧女', '玄学治病', '揭露秘密', '化敌为友',
+            # # '祖坟被毁', '母亲牺牲', '活人献祭', '主角黑化', '信念崩塌',
+            # # '封印诅咒', '被爱唤醒', '牺牲自我', '开放结局',
+            
+            # # # 主题关键词
+             #'反对校园霸凌', '相信因果报应', '人性之恶的存在', 
+             #'相信蛊术存在', '相信佛法力量'
+            ]  # 关键词搜索配置，以英文逗号分隔
+LOGIN_TYPE = "cookie"  # qrcode or phone or cookie
+COOKIES = "_s_tentry=passport.weibo.com; Apache=3456366991664.5146.1739538964837; SINAGLOBAL=3456366991664.5146.1739538964837; ULV=1739538964839:1:1:1:3456366991664.5146.1739538964837:; UOR=,,www.google.com; SCF=AmZK9Gi6HmA_DiE60iTdNdSIkdsv4zxdmbtWUxiw2OTuwf1VB_QwWf9TYroBtLN4uO9zjJRpcvmUiqair1FesUE.; XSRF-TOKEN=i9zsIBIuYzmrUypJKU4dlkhZ; ALF=1744863683; SUB=_2A25K3ISTDeRhGeNK41AU8y3Nyz-IHXVpk5hbrDV8PUJbkNANLXTQkW1NSTVxEh-Aeiawpe30T2ZlEQ3Qc_o0-qEU; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9Whf0NlImNQEQw1VD_MXGj-f5JpX5KMhUgL.Fo-X1hzfe0epehe2dJLoIEBLxK-L12BLBoMLxKqLB-BLB.zLxKBLB.BLBK5LxKBLB.zLB-et; WBPSESS=zOS_ys6IHAXPa1gfpZkQbO5xYoib3J6_H0rpZKq6kR44km9WMfW5sY4UkiPWoCpNUTWtzeH5OAJcom3c3IZGB99hr1pzO7Kcd2_PnYJuIAQizgPitRjUno-7mCYSUXhemcdg5-guX7jeEVtCQQMKNg=="
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持小红书
 SORT_TYPE = "popularity_descending"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持抖音
@@ -58,7 +123,7 @@ START_PAGE = 1
 CRAWLER_MAX_NOTES_COUNT = 200
 
 # 并发爬虫数量控制
-MAX_CONCURRENCY_NUM = 1
+MAX_CONCURRENCY_NUM = 5
 
 # 是否开启爬图片模式, 默认不开启爬图片
 ENABLE_GET_IMAGES = False
@@ -67,8 +132,9 @@ ENABLE_GET_IMAGES = False
 ENABLE_GET_COMMENTS = True
 
 # 爬取一级评论的数量控制(单视频/帖子)
-CRAWLER_MAX_COMMENTS_COUNT_SINGLENOTES = 100# 是否开启爬二级评论模式, 默认不开启爬二级评论
-# 老版本项目使用了 db, 则需参考 schema/tables.sql line 287 增加表字段
+CRAWLER_MAX_COMMENTS_COUNT_SINGLENOTES = 500
+
+# 是否开启爬二级评论模式, 默认不开启爬二级评论
 ENABLE_GET_SUB_COMMENTS = False
 
 # 已废弃⚠️⚠️⚠️指定小红书需要爬虫的笔记ID列表
@@ -172,7 +238,7 @@ ENABLE_GET_WORDCLOUD = False
 # 自定义词语及其分组
 # 添加规则：xx:yy 其中xx为自定义添加的词组，yy为将xx该词组分到的组名。
 CUSTOM_WORDS = {
-    "零几": "年份",  # 将“零几”识别为一个整体
+    "零几": "年份",  # 将"零几"识别为一个整体
     "高频词": "专业术语",  # 示例自定义词
 }
 

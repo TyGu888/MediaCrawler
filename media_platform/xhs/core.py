@@ -117,7 +117,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
         if config.CRAWLER_MAX_NOTES_COUNT < xhs_limit_count:
             config.CRAWLER_MAX_NOTES_COUNT = xhs_limit_count
         start_page = config.START_PAGE
-        for keyword in config.KEYWORDS.split(","):
+        for keyword in config.KEYWORDS:
             source_keyword_var.set(keyword)
             utils.logger.info(
                 f"[XiaoHongShuCrawler.search] Current search keyword: {keyword}"

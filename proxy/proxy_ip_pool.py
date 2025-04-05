@@ -68,7 +68,7 @@ class ProxyIpPool:
             else:
                 return False
         except Exception as e:
-            utils.logger.info(f"[ProxyIpPool._is_valid_proxy] testing {proxy.ip} err: {e}")
+            utils.logger.info(f"[ProxyIpPool._is_valid_proxy] ERROR: testing {proxy.ip} err: {e}")
             raise e
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))

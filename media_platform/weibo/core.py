@@ -18,6 +18,7 @@
 import asyncio
 import os
 import random
+import time
 from asyncio import Task
 from typing import Dict, List, Optional, Tuple
 
@@ -36,6 +37,10 @@ from .exception import DataFetchError
 from .field import SearchType
 from .help import filter_search_result_card
 from .login import WeiboLogin
+
+import sys
+import httpx
+from httpx import ReadTimeout, ConnectTimeout, ConnectError, RequestError
 
 
 class WeiboCrawler(AbstractCrawler):
@@ -112,33 +117,82 @@ class WeiboCrawler(AbstractCrawler):
         if config.CRAWLER_MAX_NOTES_COUNT < weibo_limit_count:
             config.CRAWLER_MAX_NOTES_COUNT = weibo_limit_count
         start_page = config.START_PAGE
-        for keyword in config.KEYWORDS.split(","):
+        empty_page_count = 0
+        for keyword in config.KEYWORDS:
             source_keyword_var.set(keyword)
             utils.logger.info(f"[WeiboCrawler.search] Current search keyword: {keyword}")
             page = 1
             while (page - start_page + 1) * weibo_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
-                if page < start_page:
-                    utils.logger.info(f"[WeiboCrawler.search] Skip page: {page}")
-                    page += 1
-                    continue
                 utils.logger.info(f"[WeiboCrawler.search] search weibo keyword: {keyword}, page: {page}")
-                search_res = await self.wb_client.get_note_by_keyword(
+                result = await self.wb_client.get_note_by_keyword(
                     keyword=keyword,
                     page=page,
                     search_type=SearchType.DEFAULT
                 )
-                note_id_list: List[str] = []
-                note_list = filter_search_result_card(search_res.get("cards"))
-                for note_item in note_list:
-                    if note_item:
-                        mblog: Dict = note_item.get("mblog")
-                        if mblog:
-                            note_id_list.append(mblog.get("id"))
-                            await weibo_store.update_weibo_note(note_item)
-                            await self.get_note_images(mblog)
+                
+                if result.get("no_more_content", False):
+                    empty_page_count += 1
+                    if empty_page_count >= 2:  # Two consecutive empty pages
+                        utils.logger.info(f"No more content for keyword '{keyword}' after {page} pages, moving to next keyword")
+                        empty_page_count = 0
+                        break
+                else:
+                    empty_page_count = 0  # Reset counter if we found content
+                    
+                    note_id_list: List[str] = []
+                    note_list = filter_search_result_card(result.get("cards"))
+                    for note_item in note_list:
+                        if note_item:
+                            mblog: Dict = note_item.get("mblog")
+                            if mblog:
+                                note_id = mblog.get("id")
+                                await weibo_store.update_weibo_note(note_item)
+                                await self.get_note_images(mblog)
+                                
+                                # Only add notes with comments to the list for comment crawling
+                                comments_count = int(mblog.get("comments_count", 0))
+                                if comments_count > 0:
+                                    note_id_list.append(note_id)
+                                else:
+                                    utils.logger.info(f"[WeiboCrawler.search] Note {note_id} has no comments, skipping comment crawling")
 
+                    page += 1
+                    # Only fetch comments if there are notes with comments
+                    if note_id_list:
+                        await self.batch_get_notes_comments(note_id_list)
+                    else:
+                        utils.logger.info(f"[WeiboCrawler.search] No notes with comments found on page {page} for keyword '{keyword}'")
+
+    async def get_keyword(self,keyword):
+        start_page = config.START_PAGE
+        source_keyword_var.set(keyword)
+        weibo_limit_count = 10 
+        utils.logger.info(f"[WeiboCrawler.search] Current search keyword: {keyword}")
+        page = 1
+        while (page - start_page + 1) * weibo_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+            if page < start_page:
+                utils.logger.info(f"[WeiboCrawler.search] Skip page: {page}")
                 page += 1
-                await self.batch_get_notes_comments(note_id_list)
+                continue
+            utils.logger.info(f"[WeiboCrawler.search] search weibo keyword: {keyword}, page: {page}")
+            search_res = await self.wb_client.get_note_by_keyword(
+                keyword=keyword,
+                page=page,
+                search_type=SearchType.DEFAULT
+            )
+            note_id_list: List[str] = []
+            note_list = filter_search_result_card(search_res.get("cards"))
+            for note_item in note_list:
+                if note_item:
+                    mblog: Dict = note_item.get("mblog")
+                    if mblog:
+                        note_id_list.append(mblog.get("id"))
+                        await weibo_store.update_weibo_note(note_item)
+                        await self.get_note_images(mblog)
+
+            page += 1
+            await self.batch_get_notes_comments(note_id_list)
+
 
     async def get_specified_notes(self):
         """
@@ -211,8 +265,69 @@ class WeiboCrawler(AbstractCrawler):
                 )
             except DataFetchError as ex:
                 utils.logger.error(f"[WeiboCrawler.get_note_comments] get note_id: {note_id} comment error: {ex}")
+                # 简单的重试逻辑
+                time.sleep(5)
+            except (ReadTimeout, ConnectTimeout, ConnectError) as e:
+                # 专门处理网络连接和超时错误
+                utils.logger.warning(f"[WeiboCrawler] Network/timeout error: {e}")
+                
+                # 递增重试时间策略
+                self.timeout_count = getattr(self, 'timeout_count', 0) + 1
+                retry_seconds = min(10 * self.timeout_count, 120)  # 从10秒开始，最多到2分钟
+                
+                utils.logger.info(f"Connection issue occurred. Waiting {retry_seconds} seconds before retrying...")
+                time.sleep(retry_seconds)
+                
+                # 重置成功后的超时计数器
+                if hasattr(self, 'success_after_timeout'):
+                    self.success_after_timeout += 1
+                    if self.success_after_timeout >= 3:  # 连续成功3次后重置超时计数
+                        self.timeout_count = 0
+                else:
+                    self.success_after_timeout = 0
+                
+                # 检查是否应该退出
+                if self.timeout_count >= 15:  # 如果15次连续超时，可能存在严重网络问题
+                    utils.logger.error("Too many network errors. Consider checking your network or trying later.")
+                    # 选择1: 休息较长时间后继续
+                    utils.logger.info("Taking a 10 minute break before continuing...")
+                    time.sleep(300)
+                    self.timeout_count = self.timeout_count // 2  # 减少计数而不是完全重置
+                    # 选择2: 如果希望直接退出，取消注释下面两行
+                    # utils.logger.error("Exiting due to persistent network issues.")
+                    # sys.exit(1)
             except Exception as e:
-                utils.logger.error(f"[WeiboCrawler.get_note_comments] may be been blocked, err:{e}")
+                # 处理所有其他异常，包括可能的block和其他未预见的错误
+                error_str = str(e).lower()
+                
+                # 检测block相关指标
+                block_indicators = [
+                    "expecting value: line 1 column 1 (char 0)",
+                    "访问频率过高", "请求过于频繁", "need login", "访问受限",
+                    "请求被拒绝", "操作太频繁", "无权限", "请登录", "412", "403",
+                    "empty response", "invalid json"
+                ]
+                
+                is_block = any(indicator.lower() in error_str for indicator in block_indicators)
+                
+                if is_block:
+                    # 处理block情况...
+                    utils.logger.error(f"[WeiboCrawler] Likely blocked: {e}")
+                    self.block_count = getattr(self, 'block_count', 0) + 1
+                    
+                    # 根据block次数决定休息时间和是否退出
+                    if self.block_count >= 6:
+                        utils.logger.error("Multiple blocks detected. Exiting.")
+                        sys.exit(1)
+                    else:
+                        sleep_time = 60   # 指数增长
+                        utils.logger.warning(f"Sleeping for {sleep_time} seconds...")
+                        time.sleep(sleep_time)
+                else:
+                    # 其他未知错误
+                    utils.logger.error(f"[WeiboCrawler] Unexpected error: {e}")
+                    utils.logger.info("Continuing with next task after brief pause...")
+                    time.sleep(2)  # 短暂暂停后继续
 
     async def get_note_images(self, mblog: Dict):
         """

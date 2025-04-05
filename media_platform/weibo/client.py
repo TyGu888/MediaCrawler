@@ -119,7 +119,7 @@ class WeiboClient:
         :param keyword: 微博搜搜的关键词
         :param page: 分页参数 -当前页码
         :param search_type: 搜索的类型，见 weibo/filed.py 中的枚举SearchType
-        :return:
+        :return: Dict containing search results, or empty Dict with 'no_more_content' flag if no results
         """
         uri = "/api/container/getIndex"
         containerid = f"100103type={search_type.value}&q={keyword}"
@@ -128,7 +128,22 @@ class WeiboClient:
             "page_type": "searchall",
             "page": page,
         }
-        return await self.get(uri, params)
+        
+        try:
+            result = await self.get(uri, params)
+            # Check if there are any cards in the response
+            if not result.get("cards") or len(result.get("cards", [])) == 0:
+                utils.logger.info(f"[WeiboClient.get_note_by_keyword] No content for keyword '{keyword}' at page {page}")
+                # Add a flag to indicate no content was found
+                result["no_more_content"] = True
+            return result
+        except DataFetchError as e:
+            utils.logger.warning(f"[WeiboClient.get_note_by_keyword] Error fetching keyword '{keyword}' at page {page}: {str(e)}")
+            # If we get the specific "no content" error, return empty structure with flag
+            if "这里还没有内容" in str(e):
+                return {"cards": [], "cardlistInfo": {"total": 0}, "no_more_content": True}
+            # Re-raise other errors
+            raise
 
     async def get_note_comments(self, mid_id: str, max_id: int, max_id_type: int = 0) -> Dict:
         """get notes comments

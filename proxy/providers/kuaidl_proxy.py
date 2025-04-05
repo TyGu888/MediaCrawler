@@ -138,8 +138,8 @@ def new_kuai_daili_proxy() -> KuaiDaiLiProxy:
 
     """
     return KuaiDaiLiProxy(
-        kdl_secret_id='or7tj6mpxdi46dj6kjro',
-        kdl_signature='b5rabce1uvphqgpo189cctqbl0bfrhl5',
-        kdl_user_name='d1414933521',
-        kdl_user_pwd='drur7qnt',
+        kdl_secret_id='odevwetx66kh01tm4ofs',
+        kdl_signature='iptnktcp4h72r8hetrdwn88everl13d1',
+        kdl_user_name="d3930139509",
+        kdl_user_pwd="drur7qnt",
     )

@@ -23,3 +23,4 @@ comment_tasks_var: ContextVar[List[Task]] = ContextVar("comment_tasks", default=
 media_crawler_db_var: ContextVar[AsyncMysqlDB] = ContextVar("media_crawler_db_var")
 db_conn_pool_var: ContextVar[aiomysql.Pool] = ContextVar("db_conn_pool_var")
 source_keyword_var: ContextVar[str] = ContextVar("source_keyword", default="")
+topic_var: ContextVar[str] = ContextVar("topic", default="打黑剧本")

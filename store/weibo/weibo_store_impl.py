@@ -56,8 +56,9 @@ class WeiboCsvStoreImplement(AbstractStore):
         Returns: eg: data/bilibili/search_comments_20240114.csv ...
 
         """
+        from var import topic_var
 
-        return f"{self.csv_store_path}/{crawler_type_var.get()}_{store_type}.csv"
+        return f"{self.csv_store_path}/{crawler_type_var.get()}_{store_type}_{topic_var.get()}.csv"
 
     async def save_data_to_csv(self, save_item: Dict, store_type: str):
         """
