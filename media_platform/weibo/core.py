@@ -314,15 +314,17 @@ class WeiboCrawler(AbstractCrawler):
                     # 处理block情况...
                     utils.logger.error(f"[WeiboCrawler] Likely blocked: {e}")
                     self.block_count = getattr(self, 'block_count', 0) + 1
+                    self.consecutive_block_count = getattr(self, 'consecutive_block_count', 0) + 1
                     
                     # 根据block次数决定休息时间和是否退出
-                    if self.block_count >= 6:
-                        utils.logger.error("Multiple blocks detected. Exiting.")
+                    if self.block_count >= 100:
+                        utils.logger.error("Total block count reached 100. Exiting.")
                         sys.exit(1)
-                    else:
-                        sleep_time = 60   # 指数增长
-                        utils.logger.warning(f"Sleeping for {sleep_time} seconds...")
+                    elif self.consecutive_block_count >= 2:
+                        sleep_time = random.randint(30, 60)
+                        utils.logger.warning(f"Consecutive blocks detected ({self.consecutive_block_count} times). Sleeping for {sleep_time} seconds...")
                         time.sleep(sleep_time)
+                        self.consecutive_block_count = 0  # Reset consecutive count after sleep
                 else:
                     # 其他未知错误
                     utils.logger.error(f"[WeiboCrawler] Unexpected error: {e}")

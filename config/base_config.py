@@ -10,75 +10,38 @@
 
 from var import topic_var
 
-topic_var.set("打黑剧本")
+topic_var.set("火箭少年")
 
 # 基础配置
 PLATFORM = "wb"
 KEYWORDS = [
-            
-            # 题材应用关键词
-            # '东北的犯罪故事', '黑恶势力产业链', '警察勇斗黑恶势力', 
-            # '正义与邪恶对决', '父与子的伦理秘密', '强拆事件',
-            
-            # 角色关键词-雷万一
-            #'正义警察', lui
-            #'冷酷', '执著', 
-            #'强迫症', '武力强大', '父子关系破裂',
-            
-            # 角色关键词-魏天朗
-            # '黑恶势力', '黑社会头目', '暴力', '偏执', '父权崇拜', '私生子',
-            
-            # # # 角色关键词-程琳
-            # '美貌', '蛇蝎美人', '情妇', '舞厅老板', '精明', '觉醒',
-            
-            # # # 情节关键词-第一幕
-            # '祖坟被刨', '冰河抛尸', '暴力强拆', '民工袭警', '羞辱父亲',
-            
-            # # # 情节关键词-第二幕(上)
-            # '权黑共生', '父子和解', '近身肉搏', 
-            #'工厂爆炸', '火海逃生',被打断
-            
-            # # 情节关键词-第二幕(下)
-            #'杀人灭口', '栽赃陷害', '舆论危机', '爱人去世', 
-            #'锁定线索',
-            
-            # # 情节关键词-第三幕
-            #'发现洗钱', '弑父献祭'13, 
-            '捉拿归案', '清扫腐败', '成为英雄',
-            
-            # # 主题应用关键词
-            '反对权力腐败', '正义战胜黑恶势力', '反对父权统治'
-            
-            # #角色关键词-娜缇
-            # '宿命', '宿主', '童年不幸', '被霸凌', '复仇少女', '对抗邪恶',
-            
-            # # 角色关键词-蛊婆
-            # '守墓人', '传承者', '母爱', '牺牲', '禁忌手段', '被反噬',
-            
-            # # 角色关键词-张月梅
-            # '法医', '相信科学', '丧女之痛', '追查者',
-            #   '救赎自己',
-            
-            # # 角色关键词-魏婷婷
-            # # '霸凌者', '富家女', '弑父', '疯癫', 
-            # # '恃强凌弱', '美貌',
-            
-            # # # 角色关键词-魏明轩
-            # # '暴发户', '迷信', '贪婪', '资本家', '宠女儿',
-            
-            # # # 情节关键词
-            # # '母亲难产', '驱邪仪式',
-            # #  '遭遇霸凌', '视为祸害', '直播死亡',
-            # # '法医追凶', '早年丧女', '玄学治病', '揭露秘密', '化敌为友',
-            # # '祖坟被毁', '母亲牺牲', '活人献祭', '主角黑化', '信念崩塌',
-            # # '封印诅咒', '被爱唤醒', '牺牲自我', '开放结局',
-            
-            # # # 主题关键词
-             #'反对校园霸凌', '相信因果报应', '人性之恶的存在', 
-             #'相信蛊术存在', '相信佛法力量'
-            ]  # 关键词搜索配置，以英文逗号分隔
-LOGIN_TYPE = "cookie"  # qrcode or phone or cookie
-COOKIES = "_s_tentry=passport.weibo.com; Apache=3456366991664.5146.1739538964837; SINAGLOBAL=3456366991664.5146.1739538964837; ULV=1739538964839:1:1:1:3456366991664.5146.1739538964837:; UOR=,,www.google.com; SCF=AmZK9Gi6HmA_DiE60iTdNdSIkdsv4zxdmbtWUxiw2OTuwf1VB_QwWf9TYroBtLN4uO9zjJRpcvmUiqair1FesUE.; XSRF-TOKEN=i9zsIBIuYzmrUypJKU4dlkhZ; ALF=1744863683; SUB=_2A25K3ISTDeRhGeNK41AU8y3Nyz-IHXVpk5hbrDV8PUJbkNANLXTQkW1NSTVxEh-Aeiawpe30T2ZlEQ3Qc_o0-qEU; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9Whf0NlImNQEQw1VD_MXGj-f5JpX5KMhUgL.Fo-X1hzfe0epehe2dJLoIEBLxK-L12BLBoMLxKqLB-BLB.zLxKBLB.BLBK5LxKBLB.zLB-et; WBPSESS=zOS_ys6IHAXPa1gfpZkQbO5xYoib3J6_H0rpZKq6kR44km9WMfW5sY4UkiPWoCpNUTWtzeH5OAJcom3c3IZGB99hr1pzO7Kcd2_PnYJuIAQizgPitRjUno-7mCYSUXhemcdg5-guX7jeEVtCQQMKNg=="
+    # 题材关键词
+    "不可能的任务", "草根逆袭", "叛逆少年天才", "阶级剥削", "少年友情", "民间造火箭", "魔幻现实主义",
+    
+    # 角色关键词
+   "草根天才", "妈祖信徒", "叛逆赌徒", "理想主义", "坚韧", "民间发明家",
+    "暴力伪装", "隐藏良知", "妥协的理想主义", "底层商人", "街头智慧", "黑白通吃",
+     "数学天才", "身残志坚", "技术洁癖", "殉道者", "制度受害者", "道德纯洁",
+     "父权傀儡", "精致利己", "霸凌者", "霸权维护者", "富二代", "既得利益者",
+     "心理操控", "压迫执行者", "腐败官僚", "中间商", "黑暗保护伞", "罪恶缩影",
+    
+    # 情节关键词 - 第一幕
+    "法外之地", "妈祖暗示", "挣扎求生", "黑市走私", "教室斗殴", "工厂压榨工人", "被迫低头", "航空火箭组装", "少年踏上征途",
+    
+    # 情节关键词 - 第二幕上
+    "传授秘诀", "往事揭露", "废弃教室造火箭", "废弃隧道造火箭", "二踢脚", "空调压缩机", "突破难题", "妈祖保佑", "技术转折", "命运安排", "友谊决裂", "长辈教诲",
+    
+    # 情节关键词 - 第二幕下
+    "暴力追债", "手指被夹断", "确诊癌症", "偷卖零件换钱", "濒死幻觉", "星空下的顿悟", "伴娘羞辱", "盗取废弃火箭", "威胁看守老头", "最后一搏",
+    
+    # 情节关键词 - 第三幕
+    "阻挡追兵", "解决技术问题", "光线刺破乌云", "妈祖的飘带", "告慰亡母", "产生幻觉", "照亮海湾", "麻木的工人", "悲壮落幕",
+    
+    # 主题关键词
+    "技术平权", "剥削", "技术改变命运", "底层人民创造奇迹"
+]
+LOGIN_TYPE = "qrcode"  # qrcode or phone or cookie
+COOKIES = "_s_tentry=passport.weibo.com; Apache=3456366991664.5146.1739538964837; SINAGLOBAL=3456366991664.5146.1739538964837; ULV=1739538964839:1:1:1:3456366991664.5146.1739538964837:; UOR=,,www.google.com; SCF=AmZK9Gi6HmA_DiE60iTdNdSIkdsv4zxdmbtWUxiw2OTuwf1VB_QwWf9TYroBtLN4uO9zjJRpcvmUiqair1FesUE.; XSRF-TOKEN=i9zsIBIuYzmrUypJKU4dlkhZ; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9Whf0NlImNQEQw1VD_MXGj-f5JpX5KMhUgL.Fo-X1hzfe0epehe2dJLoIEBLxK-L12BLBoMLxKqLB-BLB.zLxKBLB.BLBK5LxKBLB.zLB-et; ALF=1746613898; SUB=_2A25K99naDeRhGeNK41AU8y3Nyz-IHXVpjVMSrDV8PUJbkNAbLRGkkW1NSTVxEoXP_Fa0mH_bhHF9r7j4ejwJS1Bp; WBPSESS=zOS_ys6IHAXPa1gfpZkQbO5xYoib3J6_H0rpZKq6kR44km9WMfW5sY4UkiPWoCpNUTWtzeH5OAJcom3c3IZGBxZee6iCua7z3uMdPUZxfJTsbXen4VT5tz41X2iTQDJYAaYnHOc1IZsuQ-9rdsvnyg=="
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持小红书
 SORT_TYPE = "popularity_descending"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持抖音
